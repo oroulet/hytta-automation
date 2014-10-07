@@ -1,0 +1,39 @@
+.zone {
+    width: 20;
+    height: 6em;
+    border: 1px black solid;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.zone h2 {
+    width: 5em;
+    float: left;
+    margin: 1em;
+}
+
+.data {
+    margin: 20px;
+    float: left;
+}
+
+.zone dt {
+    margin: 2px;
+    float: left;
+    width: 8em;
+    clear: left;
+}
+
+.zone dt:after {
+    content: ":";
+}
+
+.zone dd {
+    float: left;
+    width: 10em;
+}
+

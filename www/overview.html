@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Machine</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+
+        function getLastData(sensorId, datatype, callback){
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (request.readyState  === 4 )
+                {
+                    if (request.status === 200 && request.response !== "") {
+
+                        callback(JSON.parse(request.response));
+                    };
+                }
+            };
+            var myurl = '/dbquery?sensorid=SENSOR;datatype=DTYPE';
+            var myurl = myurl.replace("SENSOR", sensorId);
+            var myurl = myurl.replace("DTYPE", datatype);
+            console.log("Sending: ", myurl);
+            request.open("GET", myurl, true);
+            request.timeout = 2000;
+            request.send();
+        }
+        
+        function getLastTemperature(sensorid, callback){
+            getLastData(sensorid, 1, callback);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function(){
+
+           setInterval(function () {
+                getLastTemperature("11", function(response)
+                {
+                    console.log("we got answer from server", response);
+                    var zone = document.getElementById("stuen");
+                    //now modify elements
+                    var temp = zone.getElementsByName("temperature")
+                    temp.textContent = response.value + "C"; 
+                });
+
+            }, 2000);
+
+        });
+    </script>
+</head>
+
+<body>
+
+<div id="overview">
+
+    <h1>Hytta</h1>
+
+    <div class="zone" id="stuen">
+        <h2> stuen </h2>
+        <span class="data">
+            <dt> Temperatur </dt>
+            <dd name="temperature"> No Data </dd>
+    
+            <dt> Fuktighet </dt>
+            <dd name="humidity"> No Data </dd>
+        </span>
+    </div>
+
+
+    <div class="zone" id="hoved">
+        <h2> Hoved Soverom </h2>
+        <span class="data">
+            <dt> Temperature </dt>
+            <dd name="temperature"> No Data </dd>
+    
+            <dt> Fuktighet </dt>
+            <dd name="humidity"> No Data </dd>
+        </span>
+    </div>
+
+
+
+</div>
+
+</body>
+
+</html>
+
