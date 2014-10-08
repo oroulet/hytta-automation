@@ -35,18 +35,22 @@
             DBQuery("getLastTemperature", {sensorid:sensorid}, callback);
         }
 
+        function updateSensorData(sensorid, elementid){
+            getLastTemperature(sensorid, function(response)
+            {
+                var zone = document.getElementById(elementid);
+                var temp = zone.getElementsByClassName("temperaturedata")
+                temp[0].textContent = response.value + "C"; 
+            });
+        }
+
 
         document.addEventListener('DOMContentLoaded', function(){
 
            setInterval(function () {
-                getLastTemperature("11", function(response)
-                {
-                    console.log("we got answer from server", response);
-                    var zone = document.getElementById("stuen");
-                    //now modify elements
-                    var temp = zone.getElementsByName("temperature")
-                    temp.textContent = response.value + "C"; 
-                });
+               updateSensorData("13", "stuen");
+               updateSensorData("11", "hoved");
+               updateSensorData("12", "familie");
 
             }, 2000);
 
@@ -58,28 +62,40 @@
 
 <div id="overview">
 
-    <h1>Hytta</h1>
+    <h1>Hytten</h1>
 
     <div class="zone" id="stuen">
         <h2> stuen </h2>
         <span class="data">
             <dt> Temperatur </dt>
-            <dd name="temperature"> No Data </dd>
+            <dd class="temperaturedata"> No Data </dd>
     
             <dt> Fuktighet </dt>
-            <dd name="humidity"> No Data </dd>
+            <dd class="humiditydata"> No Data </dd>
         </span>
     </div>
 
 
     <div class="zone" id="hoved">
-        <h2> Hoved Soverom </h2>
+        <h2> SjefStuggu </h2>
         <span class="data">
             <dt> Temperature </dt>
-            <dd name="temperature"> No Data </dd>
+            <dd class="temperaturedata"> No Data </dd>
     
             <dt> Fuktighet </dt>
-            <dd name="humidity"> No Data </dd>
+            <dd class="humiditydata"> No Data </dd>
+        </span>
+    </div>
+
+
+    <div class="zone" id="familie">
+        <h2> FamilieStuggu </h2>
+        <span class="data">
+            <dt> Temperature </dt>
+            <dd class="temperaturedata"> No Data </dd>
+    
+            <dt> Fuktighet </dt>
+            <dd class="humiditydata"> No Data </dd>
         </span>
     </div>
 

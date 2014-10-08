@@ -23,7 +23,7 @@ class DBQueryWebService(object):
         dispatch request to local method
         """
         print(self.__dict__)
-        getattr(self, method)(**kwargs)
+        return getattr(self, method)(**kwargs)
 
     #@cherrypy.tools.accept(media='text/plain')
     def getLastTemperature(self, sensorid):
@@ -32,17 +32,15 @@ class DBQueryWebService(object):
         """
         with sqlite3.connect(self.dbpath) as con:
             tablename = str(sensorid) + "temperature"
-            cmd = "SELECT * FROM '{table}' ORDER BY column DESC LIMIT 1;".format(table=tablename)
+            cmd = "SELECT * FROM '{table}' ORDER BY date(datetime) DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
             result = result.fetchall()
-            listresult = []
             for res in result:
                 d = {}
                 d["sensorid"] = sensorid 
                 d["timestamp"] = res[0]
                 d["value"] = res[1]
-                listresult.append(d) 
-            return json.dumps(listresult)
+            return json.dumps(d)
 
     def getTemperature(self, startdatetime, enddatetime=None):
         if not enddatetime:
@@ -53,7 +51,7 @@ if __name__ == '__main__':
     conf = {
             'global': {
             'server.socket_port': 8080,
-            'server.socket_hosy': 'localhost'
+            'server.socket_host': '0.0.0.0'
                 },
         '/': {
             'tools.sessions.on': True,
@@ -71,6 +69,6 @@ if __name__ == '__main__':
     }
 
     webapp = StringGenerator()
-    webapp.dbquery = DBQueryWebService("/tmp/test.sql")
+    webapp.dbquery = DBQueryWebService("/home/pi/sensordb.sql")
     cherrypy.quickstart(webapp, '/', conf)
 

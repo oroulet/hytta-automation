@@ -1,5 +1,5 @@
 .zone {
-    width: 20;
+    width: 50em;
     height: 6em;
     border: 1px black solid;
     border-radius: 10px;
@@ -11,7 +11,7 @@ h1 {
 }
 
 .zone h2 {
-    width: 5em;
+    width: 10em;
     float: left;
     margin: 1em;
 }
