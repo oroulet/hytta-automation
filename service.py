@@ -24,7 +24,7 @@ class Service(object):
         res = self.cur.execute("select * from sqlite_master where name='%s'" % tablename).fetchall()
         if not res:
             print("creating table")
-            self.cur.execute("create table '%s' (datetime STRING, value REAL)"%tablename)
+            self.cur.execute("create table '%s' (timestamp STRING, value REAL)"%tablename)
         self._tablecache.append(tablename)
     
     def disconnect_db(self):

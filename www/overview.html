@@ -35,24 +35,38 @@
             DBQuery("getLastTemperature", {sensorid:sensorid}, callback);
         }
 
+        function getLastHumidity(sensorid, callback){
+            DBQuery("getLastHumidity", {sensorid:sensorid}, callback);
+        }
+
         function updateSensorData(sensorid, elementid){
             getLastTemperature(sensorid, function(response)
             {
                 var zone = document.getElementById(elementid);
                 var temp = zone.getElementsByClassName("temperaturedata")
-                temp[0].textContent = response.value + "C"; 
+                temp[0].textContent = response.value + " C"; 
             });
+            getLastHumidity(sensorid, function(response)
+            {
+                var zone = document.getElementById(elementid);
+                var temp = zone.getElementsByClassName("humiditydata")
+                temp[0].textContent = response.value + " %"; 
+            });
+        }
+
+        function updateAll()
+        {
+            updateSensorData("13", "stuen");
+            updateSensorData("11", "hoved");
+            updateSensorData("12", "familie");
         }
 
 
         document.addEventListener('DOMContentLoaded', function(){
-
-           setInterval(function () {
-               updateSensorData("13", "stuen");
-               updateSensorData("11", "hoved");
-               updateSensorData("12", "familie");
-
-            }, 2000);
+            updateAll();
+            setInterval(function () {
+                updateAll();
+            }, 10000);
 
         });
     </script>

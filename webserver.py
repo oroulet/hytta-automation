@@ -32,7 +32,7 @@ class DBQueryWebService(object):
         """
         with sqlite3.connect(self.dbpath) as con:
             tablename = str(sensorid) + "temperature"
-            cmd = "SELECT * FROM '{table}' ORDER BY date(datetime) DESC LIMIT 1;".format(table=tablename)
+            cmd = "SELECT * FROM '{table}' ORDER BY date(timestamp) DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
             result = result.fetchall()
             for res in result:
@@ -46,6 +46,24 @@ class DBQueryWebService(object):
         if not enddatetime:
             enddatetime = datetime.datetime.now()
         #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
+
+    def getLastHumidity(self, sensorid):
+        """
+        return only last  temperatur record for given sensor
+        """
+        with sqlite3.connect(self.dbpath) as con:
+            tablename = str(sensorid) + "humidity"
+            cmd = "SELECT * FROM '{table}' ORDER BY date(timestamp) DESC LIMIT 1;".format(table=tablename)
+            result = con.execute(cmd)
+            result = result.fetchall()
+            for res in result:
+                d = {}
+                d["sensorid"] = sensorid 
+                d["timestamp"] = res[0]
+                d["value"] = res[1]
+            return json.dumps(d)
+
+
 
 if __name__ == '__main__':
     conf = {
