@@ -2,6 +2,7 @@ import json
 import os
 import datetime
 
+from IPython import embed
 import sqlite3
 import cherrypy
 
@@ -17,31 +18,36 @@ class DBQueryWebService(object):
     def __init__(self, dbpath):
         self.dbpath = dbpath
 
-    #@cherrypy.tools.accept(media='text/plain')
-    def GET(self, sensorid, datatype, startdatetime=None):
+    def GET(self, method, **kwargs):
         """
-        return only last record in db, otherwise from datetime 
+        dispatch request to local method
+        """
+        print(self.__dict__)
+        getattr(self, method)(**kwargs)
+
+    #@cherrypy.tools.accept(media='text/plain')
+    def getLastTemperature(self, sensorid):
+        """
+        return only last  temperatur record for given sensor
         """
         with sqlite3.connect(self.dbpath) as con:
-            tablename = str(sensorid) + datatype
-            if not startdatetime:
-                #cmd = "SELECT * FROM '{table}' WHERE sensor={sensor} AND type={datatype} AND datetime=(SELECT MAX(date(datetime)) FROM '{table}') LILMIT 1;".format(table=self.tablename, sensor=sensorid, datatype=datatype)
-                cmd = "SELECT * FROM '{table}' ORDER BY column DESC LIMIT 1;".format(table=tablename)
-            else:
-                #FIXME: should limie amound of data, create min osv ...
-                cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (tablename, startdatetime)
+            tablename = str(sensorid) + "temperature"
+            cmd = "SELECT * FROM '{table}' ORDER BY column DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
             result = result.fetchall()
             listresult = []
             for res in result:
                 d = {}
-                d["sensor"] = res[0]
-                d["timestamp"] = res[1]
-                d["type"] = res[2]
-                d["value"] = res[3]
+                d["sensorid"] = sensorid 
+                d["timestamp"] = res[0]
+                d["value"] = res[1]
                 listresult.append(d) 
             return json.dumps(listresult)
 
+    def getTemperature(self, startdatetime, enddatetime=None):
+        if not enddatetime:
+            enddatetime = datetime.datetime.now()
+        #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
 
 if __name__ == '__main__':
     conf = {
