@@ -32,7 +32,7 @@ class DBQueryWebService(object):
         """
         with sqlite3.connect(self.dbpath) as con:
             tablename = str(sensorid) + "temperature"
-            cmd = "SELECT * FROM '{table}' ORDER BY date(timestamp) DESC LIMIT 1;".format(table=tablename)
+            cmd = "SELECT * FROM '{table}' ORDER BY datetime(timestamp) DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
             result = result.fetchall()
             for res in result:
@@ -53,7 +53,7 @@ class DBQueryWebService(object):
         """
         with sqlite3.connect(self.dbpath) as con:
             tablename = str(sensorid) + "humidity"
-            cmd = "SELECT * FROM '{table}' ORDER BY date(timestamp) DESC LIMIT 1;".format(table=tablename)
+            cmd = "SELECT * FROM '{table}' ORDER BY datetime(timestamp) DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
             result = result.fetchall()
             for res in result:

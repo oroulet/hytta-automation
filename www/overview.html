@@ -42,23 +42,25 @@
         function updateSensorData(sensorid, elementid){
             getLastTemperature(sensorid, function(response)
             {
-                var zone = document.getElementById(elementid);
-                var temp = zone.getElementsByClassName("temperaturedata")
-                temp[0].textContent = response.value + " C"; 
+                var tmp = document.getElementById("temp_" + elementid);
+                tmp.textContent = response.value + " C"; 
+                var tmp = document.getElementById("temp_" + elementid + "_ts");
+                tmp.textContent = response.timestamp ; 
             });
             getLastHumidity(sensorid, function(response)
             {
-                var zone = document.getElementById(elementid);
-                var temp = zone.getElementsByClassName("humiditydata")
-                temp[0].textContent = response.value + " %"; 
+                var tmp = document.getElementById("hum_" + elementid);
+                tmp.textContent = response.value + " C"; 
+                var tmp = document.getElementById("hum_" + elementid + "_ts");
+                tmp.textContent = response.timestamp ; 
             });
         }
 
         function updateAll()
         {
             updateSensorData("13", "stuen");
-            updateSensorData("11", "hoved");
-            updateSensorData("12", "familie");
+            updateSensorData("11", "sjef");
+            updateSensorData("12", "barna");
         }
 
 
@@ -81,37 +83,41 @@
     <div class="zone" id="stuen">
         <h2> stuen </h2>
         <span class="data">
-            <dt> Temperatur </dt>
-            <dd class="temperaturedata"> No Data </dd>
-    
-            <dt> Fuktighet </dt>
-            <dd class="humiditydata"> No Data </dd>
+            <span class="dataname"> Temperatur </span>
+            <span class="datavalue" id="temp_stuen"> No Data </span>
+            <span class="datatimestamp" id="temp_stuen_ts"> No Data </span>
+            <span class="dataname"> Fuktighet </span>
+            <span class="datavalue" id="hum_stuen"> No Data </span>
+            <span class="datatimestamp" id="hum_stuen_ts"> No Data </span>
         </span>
     </div>
 
 
-    <div class="zone" id="hoved">
-        <h2> SjefStuggu </h2>
+    <div class="zone" id="SjefStuggu">
+        <h2> stuen </h2>
         <span class="data">
-            <dt> Temperature </dt>
-            <dd class="temperaturedata"> No Data </dd>
-    
-            <dt> Fuktighet </dt>
-            <dd class="humiditydata"> No Data </dd>
+            <span class="dataname"> Temperatur </span>
+            <span class="datavalue" id="temp_sjef"> No Data </span>
+            <span class="datatimestamp" id="temp_sjef_ts"> No Data </span>
+            <span class="dataname"> Fuktighet </span>
+            <span class="datavalue" id="hum_sjef"> No Data </span>
+            <span class="datatimestamp" id="hum_sjef_ts"> No Data </span>
         </span>
     </div>
 
 
-    <div class="zone" id="familie">
+    <div class="zone" id="barna">
         <h2> FamilieStuggu </h2>
         <span class="data">
-            <dt> Temperature </dt>
-            <dd class="temperaturedata"> No Data </dd>
-    
-            <dt> Fuktighet </dt>
-            <dd class="humiditydata"> No Data </dd>
+            <span class="dataname"> Temperatur </span>
+            <span class="datavalue" id="temp_barna"> No Data </span>
+            <span class="datatimestamp" id="temp_barna_ts"> No Data </span>
+            <span class="dataname"> Fuktighet </span>
+            <span class="datavalue" id="hum_barna"> No Data </span>
+            <span class="datatimestamp" id="hum_barna_ts"> No Data </span>
         </span>
     </div>
+
 
 
 
