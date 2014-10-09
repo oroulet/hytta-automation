@@ -5,7 +5,7 @@
 
 <head>
 
-    <title>Machine</title>
+    <title>Hytten</title>
     <link rel="stylesheet" href="css/style.css">
 
     <script>
@@ -59,10 +59,11 @@
         function updateAll()
         {
             updateSensorData("13", "stuen");
-            updateSensorData("11", "sjef");
+            //updateSensorData("11", "sjef");
+            updateSensorData("11", "ute");
             updateSensorData("12", "barna");
+            updateSensorData("232", "bad");
         }
-
 
         document.addEventListener('DOMContentLoaded', function(){
             updateAll();
@@ -81,7 +82,7 @@
     <h1>Hytten</h1>
 
     <div class="zone" id="stuen">
-        <h2> stuen </h2>
+        <h2> Stuen </h2>
         <span class="data">
             <span class="dataname"> Temperatur </span>
             <span class="datavalue" id="temp_stuen"> No Data </span>
@@ -94,7 +95,7 @@
 
 
     <div class="zone" id="SjefStuggu">
-        <h2> stuen </h2>
+        <h2> SjefStuggu </h2>
         <span class="data">
             <span class="dataname"> Temperatur </span>
             <span class="datavalue" id="temp_sjef"> No Data </span>
@@ -107,19 +108,42 @@
 
 
     <div class="zone" id="barna">
-        <h2> FamilieStuggu </h2>
+        <h2> familiestuggu </h2>
         <span class="data">
-            <span class="dataname"> Temperatur </span>
-            <span class="datavalue" id="temp_barna"> No Data </span>
-            <span class="datatimestamp" id="temp_barna_ts"> No Data </span>
-            <span class="dataname"> Fuktighet </span>
-            <span class="datavalue" id="hum_barna"> No Data </span>
-            <span class="datatimestamp" id="hum_barna_ts"> No Data </span>
+            <span class="dataname"> temperatur </span>
+            <span class="datavalue" id="temp_barna"> no data </span>
+            <span class="datatimestamp" id="temp_barna_ts"> no data </span>
+            <span class="dataname"> fuktighet </span>
+            <span class="datavalue" id="hum_barna"> no data </span>
+            <span class="datatimestamp" id="hum_barna_ts"> no data </span>
         </span>
     </div>
 
 
+    <div class="zone" id="bad">
+        <h2> Bad </h2>
+        <span class="data">
+            <span class="dataname"> temperatur </span>
+            <span class="datavalue" id="temp_bad"> no data </span>
+            <span class="datatimestamp" id="temp_bad_ts"> no data </span>
+            <span class="dataname"> fuktighet </span>
+            <span class="datavalue" id="hum_bad"> no data </span>
+            <span class="datatimestamp" id="hum_bad_ts"> no data </span>
+        </span>
+    </div>
 
+
+    <div class="zone" id="ute">
+        <h2> Ute </h2>
+        <span class="data">
+            <span class="dataname"> temperatur </span>
+            <span class="datavalue" id="temp_ute"> no data </span>
+            <span class="datatimestamp" id="temp_ute_ts"> no data </span>
+            <span class="dataname"> fuktighet </span>
+            <span class="datavalue" id="hum_ute"> no data </span>
+            <span class="datatimestamp" id="hum_ute_ts"> no data </span>
+        </span>
+    </div>
 
 </div>
 

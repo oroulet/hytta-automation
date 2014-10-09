@@ -2,7 +2,7 @@
 #
 
 ### BEGIN INIT INFO
-# Provides:          hytta 
+# Provides:          hytta-web 
 # Required-Start:    $network $remote_fs $syslog
 # Required-Stop:     $network $remote_fs $syslog
 # Should-Start:
@@ -16,16 +16,16 @@
 
 
 set -x
-workdir=/home/pi/
+workdir=/home/pi/hytta-automation/
  
 start() {
     cd $workdir
-    /usr/bin/python /home/pi/hytta-automation/service.py &
+    /usr/bin/python /home/pi/hytta-automation/webserver.py &
     echo "Server started."
 }
  
 stop() {
-    pid=`ps -ef | grep '[p]ython /home/pi/hytta-automation/service.py' | awk '{ print $2 }'`
+    pid=`ps -ef | grep '[p]ython /home/pi/hytta-automation/webserver.py' | awk '{ print $2 }'`
     echo $pid
     kill $pid
     sleep 2
