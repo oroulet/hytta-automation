@@ -27,7 +27,7 @@
             }
             console.log("Sending: ", myurl);
             request.open("GET", myurl, true);
-            request.timeout = 2000;
+            request.timeout = 15000;
             request.send();
         }
         
@@ -69,7 +69,7 @@
             updateAll();
             setInterval(function () {
                 updateAll();
-            }, 10000);
+            }, 30000);
 
         });
     </script>
