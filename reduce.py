@@ -1,7 +1,9 @@
 import sqlite3
 import datetime
-import statistics
-import dateutil.parser
+import time
+#import statistics
+#import dateutil.parser
+
 
 class Reduce(object):
     def __init__(self, dbpath):
@@ -23,7 +25,9 @@ class Reduce(object):
         result = self.db.execute("SELECT timestamp FROM '{}' ORDER BY rowid ASC LIMIT 1".format(tablename))
         ts = result.fetchone()[0]
         print ("oldest timestamp is : ", ts)
-        oldest = dateutil.parser.parse(ts)
+        #oldest = dateutil.parser.parse(ts)
+        #oldest = ISO8601ToDateTime(ts)
+        oldest = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
         return datetime.datetime(year=oldest.year, month=oldest.month, day=oldest.day, hour=oldest.hour) #rounding to hour
 
 
@@ -56,7 +60,8 @@ class Reduce(object):
         if len(temps) < 10:
             print("not ennough data for ", startts, " ignoring")
         else:
-            print("saving: ", savetable, startts, statistics.mean(temps))
+            mean = float(sum(temps))/len(temps)
+            print("saving: ", savetable, startts, mean)
         return rowids
 
     def remove_rows(self, tablename, rowids):
