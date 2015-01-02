@@ -39,7 +39,9 @@ class DBQueryWebService(object):
             for res in result:
                 d = {}
                 d["sensorid"] = sensorid 
-                d["timestamp"] = res[0]
+                ts = res[0]
+                ts = datetime.datetime.fromtimestamp(ts).isoformat()
+                d["timestamp"] = ts 
                 d["value"] = res[1]
             return json.dumps(d)
 
@@ -61,7 +63,9 @@ class DBQueryWebService(object):
             for res in result:
                 d = {}
                 d["sensorid"] = sensorid 
-                d["timestamp"] = res[0]
+                ts = res[0]
+                ts = datetime.datetime.fromtimestamp(ts).isoformat()
+                d["timestamp"] = ts 
                 d["value"] = res[1]
             return json.dumps(d)
 
