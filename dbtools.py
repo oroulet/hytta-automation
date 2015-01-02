@@ -57,6 +57,15 @@ class Tools(object):
             except:
                 print("Error reading table: ", name)
 
+    def show_tail(self, tablename):
+        for res in self.cur.execute("select * from '{}' ORDER BY rowid ASC LIMIT 10".format(tablename)):
+            print(res)
+
+    def show_head(self, tablename):
+        for res in self.cur.execute("select * from '{}' ORDER BY rowid DESC LIMIT 10".format(tablename)):
+            print(res)
+
+
 
     def clean_table(self, tablename):
         self.check_or_create_table(tablename + "_week")
@@ -80,15 +89,17 @@ class Tools(object):
         print("Converting ", tablename)
         cmd = "select rowid, timestamp from '{}'".format(tablename)
         for rowid, ts in self.cur.execute(cmd).fetchall():
-            if not type(ts) is float:
-                try:
-                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
-                except:
-                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
+            if type(ts) is float:
+                print("ts is float", ts)
+                continue
+            try:
+                ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
+            except:
+                ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
 
-                ts = unix_time(ts)
-                #cmd = "UPDATE '{}' SET timestamp={} WHERE rowid={}".format(tablename, ts, rowid)
-                self.cur.execute(cmd)
+            ts = unix_time(ts)
+            cmd = "UPDATE '{}' SET timestamp={} WHERE rowid={}".format(tablename, ts, rowid)
+            self.cur.execute(cmd)
         
 
      

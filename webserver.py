@@ -11,6 +11,9 @@ class StringGenerator(object):
     def index(self):
         return open('www/overview.html')
 
+    @cherrypy.expose
+    def graph(self):
+        return "this is ok" 
 
 class DBQueryWebService(object):
     exposed = True
@@ -25,13 +28,8 @@ class DBQueryWebService(object):
         print(self.__dict__)
         return getattr(self, method)(**kwargs)
 
-    #@cherrypy.tools.accept(media='text/plain')
-    def getLastTemperature(self, sensorid):
-        """
-        return only last  temperatur record for given sensor
-        """
+    def _get_last_data(self, sensorid, tablename):
         with sqlite3.connect(self.dbpath) as con:
-            tablename = str(sensorid) + "temperature"
             #cmd = "SELECT * FROM '{table}' ORDER BY datetime(timestamp) DESC LIMIT 1;".format(table=tablename)
             cmd = "SELECT * FROM '{table}' ORDER BY rowid DESC LIMIT 1;".format(table=tablename)
             result = con.execute(cmd)
@@ -45,29 +43,25 @@ class DBQueryWebService(object):
                 d["value"] = res[1]
             return json.dumps(d)
 
-    def getTemperature(self, startdatetime, enddatetime=None):
-        if not enddatetime:
-            enddatetime = datetime.datetime.now()
-        #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
+    def getLastTemperature(self, sensorid):
+        """
+        return only last  temperatur record for given sensor
+        """
+        tablename = str(sensorid) + "temperature"
+        return self._get_last_data(sensorid, tablename)
+
 
     def getLastHumidity(self, sensorid):
         """
         return only last  temperatur record for given sensor
         """
-        with sqlite3.connect(self.dbpath) as con:
-            tablename = str(sensorid) + "humidity"
-            #cmd = "SELECT * FROM '{table}' ORDER BY datetime(timestamp) DESC LIMIT 1;".format(table=tablename)
-            cmd = "SELECT * FROM '{table}' ORDER BY rowid DESC LIMIT 1;".format(table=tablename)
-            result = con.execute(cmd)
-            result = result.fetchall()
-            for res in result:
-                d = {}
-                d["sensorid"] = sensorid 
-                ts = res[0]
-                ts = datetime.datetime.fromtimestamp(ts).isoformat()
-                d["timestamp"] = ts 
-                d["value"] = res[1]
-            return json.dumps(d)
+        tablename = str(sensorid) + "humidity"
+        return self._get_last_data(sensorid, tablename)
+
+    def getTemperature(self, startdatetime, enddatetime=None):
+        if not enddatetime:
+            enddatetime = datetime.datetime.now()
+        #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
 
 
 
@@ -93,6 +87,6 @@ if __name__ == '__main__':
     }
 
     webapp = StringGenerator()
-    webapp.dbquery = DBQueryWebService("/home/pi/sensordb.sql")
+    webapp.dbquery = DBQueryWebService("./sensordb.sql")
     cherrypy.quickstart(webapp, '/', conf)
 
