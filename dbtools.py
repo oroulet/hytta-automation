@@ -84,7 +84,7 @@ class Tools(object):
                 try:
                     ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
                 except:
-                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
+                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
 
                 ts = unix_time(ts)
                 #cmd = "UPDATE '{}' SET timestamp={} WHERE rowid={}".format(tablename, ts, rowid)
