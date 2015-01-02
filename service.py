@@ -1,6 +1,7 @@
 import sqlite3
 import trollius as asyncio
-from datetime import datetime
+import time
+#from datetime import datetime
 from IPython import embed
 
 import tellcore.telldus as td
@@ -48,8 +49,9 @@ class Service(object):
         elif dataType == 2:
             tablename = str(id_) + "humidity"
         self.check_or_create_table(tablename)
-        tid = datetime.now().isoformat()
-        cmd = "insert into '%s' values ('%s', %s)" % (tablename, tid, float(value))
+        #tid = datetime.now().isoformat()
+        tid = time.time()
+        cmd = "insert into '%s' values (%s, %s)" % (tablename, tid, float(value))
         print cmd
         self.cur.execute(cmd)
         self.conn.commit()

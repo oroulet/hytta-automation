@@ -77,13 +77,18 @@ class Tools(object):
             self.convert_to_epoch(tablename)
 
     def convert_to_epoch(self, tablename):
+        print("Converting ", tablename)
         cmd = "select rowid, timestamp from '{}'".format(tablename)
         for rowid, ts in self.cur.execute(cmd).fetchall():
-            ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
-            ts = unix_time(ts)
-            #cmd = "UPDATE '{}' SET timestamp={} WHERE rowid={}".format(tablename, ts, rowid)
-            print(cmd)
-            self.cur.execute(cmd)
+            if not type(ts) is float:
+                try:
+                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
+                except:
+                    ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
+
+                ts = unix_time(ts)
+                #cmd = "UPDATE '{}' SET timestamp={} WHERE rowid={}".format(tablename, ts, rowid)
+                self.cur.execute(cmd)
         
 
      
