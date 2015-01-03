@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Plot</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="css/Chart.js"></script>
+    
+    <script>
+
+        function DBQuery(method, args, callback){
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (request.readyState  === 4 )
+                {
+                    if (request.status === 200 && request.response !== "") {
+
+                        callback(JSON.parse(request.response));
+                    };
+                }
+            };
+            var myurl = '/dbquery?method=' + method;
+            for ( attr in args ){
+                myurl = myurl + ";" + attr + "=" + args[attr];
+            }
+            console.log("Sending: ", myurl);
+            request.open("GET", myurl, true);
+            request.timeout = 15000;
+            request.send();
+        }
+
+        function getTemperature(sensorid, callback){
+            DBQuery("getTemperature", {sensorid:sensorid}, callback);
+        }
+
+
+var result = [["16.9", "17.1", "17.1", "17.1", "17.1", "17.1", "17.2", "17.2", "17.2", "17.2"],                                                                  
+      ["2014-08-04 23:06:01", "2014-08-04 23:03:02", "2014-08-04 23:00:02", "2014-08-04 22:57:01", "2014-08-04 22:54:01", "2014-08-04 22:51:02", "2014-08-04 22:48:01", "2014-08-04 22:45:02", "2014-08-04 22:42:01", "2014-08-04 22:39:02"]];
+
+ 
+        document.addEventListener('DOMContentLoaded', function(){
+            console.log("TITI");
+            var ctx = document.getElementById("myChart").getContext("2d");
+
+            getTemperature("13", function(response)
+            {
+                console.log("Creating graph");
+                console.log(response.timestamps);
+
+                var data = {
+                        labels : response.timestamps,
+                        datasets : [{
+                            fillColor : "rgba(172,194,132,0.4)",
+                            strokeColor : "#ACC26D",
+                            pointColor : "#fff",
+                            pointStrokeColor : "#9DB86D",
+                            data : response.values
+                        }]
+    };
+
+
+                var myLineChart = new Chart(ctx).Line(data);
+            });
+
+
+
+        });
+
+
+
+    </script>
+</head>
+
+<body>
+
+<div id="overview">
+TOTOT
+<canvas id="myChart" width="1200" height="400"></canvas>
+
+</div>
+
+</body>
+
+</html>
+

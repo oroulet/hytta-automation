@@ -6,6 +6,12 @@ from IPython import embed
 import sqlite3
 import cherrypy
 
+def unix_time(dt):
+    epoch = datetime.datetime.utcfromtimestamp(0)
+    delta = dt - epoch
+    return delta.total_seconds()
+
+
 class StringGenerator(object):
     @cherrypy.expose
     def index(self):
@@ -13,7 +19,7 @@ class StringGenerator(object):
 
     @cherrypy.expose
     def graph(self):
-        return "this is ok" 
+        return open('www/graph.html')
 
 class DBQueryWebService(object):
     exposed = True
@@ -63,6 +69,45 @@ class DBQueryWebService(object):
             enddatetime = datetime.datetime.now()
         #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
 
+    def getTemperature(self, sensorid):
+        """
+        """
+        start = datetime.datetime.now() - datetime.timedelta(hours=48)
+        start = unix_time(start)
+        tablename = str(sensorid) + "temperature"
+        return self._get_data(sensorid, tablename, start)
+
+    def _get_data_json(self, sensorid, tablename, start):
+        with sqlite3.connect(self.dbpath) as con:
+            cmd = "SELECT * FROM '{}' WHERE timestamp > {};".format(tablename, start)
+            d = {}
+            d["sensorid"] = sensorid 
+            data = {}
+            d["data"] = data 
+            result = con.execute(cmd)
+            for res in result.fetchall():
+                ts = res[0]
+                ts = datetime.datetime.fromtimestamp(ts).isoformat()
+                val = res[1]
+                data[ts] = val
+            return json.dumps(d)
+
+    def _get_data(self, sensorid, tablename, start):
+        with sqlite3.connect(self.dbpath) as con:
+            cmd = "SELECT * FROM '{}' WHERE timestamp > {};".format(tablename, start)
+            timestamps = []
+            vals = []
+            result = con.execute(cmd)
+            for res in result.fetchall():
+                ts = res[0]
+                ts = datetime.datetime.fromtimestamp(ts).isoformat()
+                timestamps.append(ts)
+                vals.append(res[1])
+            d = {}
+            d["timestamps"] = timestamps[::100]
+            d["values"] = vals[::100]
+            return json.dumps(d)
+
 
 
 if __name__ == '__main__':
@@ -83,7 +128,12 @@ if __name__ == '__main__':
         '/css': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': './css'
+        },
+        '/js': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': './js'
         }
+
     }
 
     webapp = StringGenerator()
