@@ -7,8 +7,8 @@
 
     <title>Plot</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <script src="css/Chart.js"></script>
+    <link rel="stylesheet" href="css/plot.css">
+    <script src="js/Chart.js"></script>
     
     <script>
 
@@ -38,15 +38,16 @@
         }
 
 
-var result = [["16.9", "17.1", "17.1", "17.1", "17.1", "17.1", "17.2", "17.2", "17.2", "17.2"],                                                                  
-      ["2014-08-04 23:06:01", "2014-08-04 23:03:02", "2014-08-04 23:00:02", "2014-08-04 22:57:01", "2014-08-04 22:54:01", "2014-08-04 22:51:02", "2014-08-04 22:48:01", "2014-08-04 22:45:02", "2014-08-04 22:42:01", "2014-08-04 22:39:02"]];
-
+        Chart.defaults.global.responsive = true;
+        Chart.defaults.global.animation = false; 
  
         document.addEventListener('DOMContentLoaded', function(){
-            console.log("TITI");
+            console.log("OnLoad method");
             var ctx = document.getElementById("myChart").getContext("2d");
 
-            getTemperature("13", function(response)
+            var sensorid = window.location.search.split("=")[1];
+
+            getTemperature(sensorid, function(response)
             {
                 console.log("Creating graph");
                 console.log(response.timestamps);
@@ -60,13 +61,11 @@ var result = [["16.9", "17.1", "17.1", "17.1", "17.1", "17.1", "17.2", "17.2", "
                             pointStrokeColor : "#9DB86D",
                             data : response.values
                         }]
-    };
+                };
 
 
                 var myLineChart = new Chart(ctx).Line(data);
             });
-
-
 
         });
 
@@ -77,11 +76,9 @@ var result = [["16.9", "17.1", "17.1", "17.1", "17.1", "17.1", "17.2", "17.2", "
 
 <body>
 
-<div id="overview">
-TOTOT
-<canvas id="myChart" width="1200" height="400"></canvas>
-
-</div>
+    <div id="myplot">
+        <canvas id="myChart"></canvas>
+    </div>
 
 </body>
 

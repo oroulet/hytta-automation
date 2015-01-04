@@ -12,14 +12,14 @@ def unix_time(dt):
     return delta.total_seconds()
 
 
-class StringGenerator(object):
+class WebApp(object):
     @cherrypy.expose
     def index(self):
         return open('www/overview.html')
 
     @cherrypy.expose
-    def graph(self):
-        return open('www/graph.html')
+    def plot(self, sensorid=11):
+        return open('www/plot.html')
 
 class DBQueryWebService(object):
     exposed = True
@@ -64,15 +64,10 @@ class DBQueryWebService(object):
         tablename = str(sensorid) + "humidity"
         return self._get_last_data(sensorid, tablename)
 
-    def getTemperature(self, startdatetime, enddatetime=None):
-        if not enddatetime:
-            enddatetime = datetime.datetime.now()
-        #cmd = "SELECT * FROM '%s' WHERE date(datetime)>='%s';" % (self.tablename, startdatetime)
-
     def getTemperature(self, sensorid):
         """
         """
-        start = datetime.datetime.now() - datetime.timedelta(hours=48)
+        start = datetime.datetime.now() - datetime.timedelta(hours=92)
         start = unix_time(start)
         tablename = str(sensorid) + "temperature"
         return self._get_data(sensorid, tablename, start)
@@ -104,8 +99,8 @@ class DBQueryWebService(object):
                 timestamps.append(ts)
                 vals.append(res[1])
             d = {}
-            d["timestamps"] = timestamps[::100]
-            d["values"] = vals[::100]
+            d["timestamps"] = timestamps[::50]
+            d["values"] = vals[::50]
             return json.dumps(d)
 
 
@@ -136,7 +131,7 @@ if __name__ == '__main__':
 
     }
 
-    webapp = StringGenerator()
+    webapp = WebApp()
     webapp.dbquery = DBQueryWebService("./sensordb.sql")
     cherrypy.quickstart(webapp, '/', conf)
 
