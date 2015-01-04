@@ -64,8 +64,24 @@
             updateSensorData("12", "barna");
             updateSensorData("232", "bad");
         }
+        function setupLink(sensorid, elementid)
+        {
+            console.log("setup link " + sensorid);
+            var tmp = document.getElementById("plot_temp_" + elementid);
+            tmp.href = 'plot?sensorid=' + sensorid;
+        }
+        
+
+        function setupLinks(sensorid, elementid)
+        {
+            setupLink("13", "stuen");
+            setupLink("11", "ute");
+            setupLink("12", "barna");
+            setupLink("232", "bad");
+        }
 
         document.addEventListener('DOMContentLoaded', function(){
+            setupLinks();
             updateAll();
             setInterval(function () {
                 updateAll();
@@ -90,12 +106,13 @@
             <span class="dataname"> Fuktighet </span>
             <span class="datavalue" id="hum_stuen"> No Data </span>
             <span class="datatimestamp" id="hum_stuen_ts"> No Data </span>
+        </span>
         <span class="links">
-             <a href="plot?sensorid=13">graph</a> 
+             <a id="plot_temp_stuen" href="">graph</a> 
         </span>
     </div>
 
-
+<!--
     <div class="zone" id="SjefStuggu">
         <h2> SjefStuggu </h2>
         <span class="data">
@@ -108,7 +125,7 @@
         </span>
     </div>
 
-
+-->
     <div class="zone" id="barna">
         <h2> familiestuggu </h2>
         <span class="data">
@@ -118,6 +135,9 @@
             <span class="dataname"> fuktighet </span>
             <span class="datavalue" id="hum_barna"> no data </span>
             <span class="datatimestamp" id="hum_barna_ts"> no data </span>
+        </span>
+        <span class="links">
+             <a id="plot_temp_barna" href="">graph</a> 
         </span>
     </div>
 
@@ -132,6 +152,9 @@
             <span class="datavalue" id="hum_bad"> no data </span>
             <span class="datatimestamp" id="hum_bad_ts"> no data </span>
         </span>
+        <span class="links">
+             <a id="plot_temp_bad" href="">graph</a> 
+        </span>
     </div>
 
 
@@ -144,6 +167,9 @@
             <span class="dataname"> fuktighet </span>
             <span class="datavalue" id="hum_ute"> no data </span>
             <span class="datatimestamp" id="hum_ute_ts"> no data </span>
+        </span>
+        <span class="links">
+             <a id="plot_temp_ute" href="">graph</a> 
         </span>
     </div>
 

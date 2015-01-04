@@ -1,5 +1,5 @@
 .zone {
-    width: 50em;
+    width: 55em;
     height: 6em;
     border: 1px black solid;
     border-radius: 10px;
@@ -40,7 +40,12 @@ h1 {
 
 .datatimestamp {
     float: left;
-    width: 10em;
+    width: 15em;
     font-size: 70%;
 }
 
+.links {
+    float: left;
+    width: 7em;
+    margin: 1em;
+}
