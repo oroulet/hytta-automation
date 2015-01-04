@@ -67,7 +67,7 @@ class DBQueryWebService(object):
     def getTemperature(self, sensorid):
         """
         """
-        start = datetime.datetime.now() - datetime.timedelta(hours=92)
+        start = datetime.datetime.now() - datetime.timedelta(hours=48)
         start = unix_time(start)
         tablename = str(sensorid) + "temperature"
         return self._get_data(sensorid, tablename, start)
@@ -95,12 +95,14 @@ class DBQueryWebService(object):
             result = con.execute(cmd)
             for res in result.fetchall():
                 ts = res[0]
+                if type(ts) in (str, unicode):
+                    continue
                 ts = datetime.datetime.fromtimestamp(ts).isoformat()
                 timestamps.append(ts)
                 vals.append(res[1])
             d = {}
-            d["timestamps"] = timestamps[::50]
-            d["values"] = vals[::50]
+            d["timestamps"] = timestamps[::100]
+            d["values"] = vals[::100]
             return json.dumps(d)
 
 
@@ -132,6 +134,6 @@ if __name__ == '__main__':
     }
 
     webapp = WebApp()
-    webapp.dbquery = DBQueryWebService("./sensordb.sql")
+    webapp.dbquery = DBQueryWebService("/home/pi/sensordb.sql")
     cherrypy.quickstart(webapp, '/', conf)
 

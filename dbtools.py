@@ -89,8 +89,7 @@ class Tools(object):
         print("Converting ", tablename)
         cmd = "select rowid, timestamp from '{}'".format(tablename)
         for rowid, ts in self.cur.execute(cmd).fetchall():
-            if type(ts) is float:
-                print("ts is float", ts)
+            if type(ts) is float or type(ts) is int:
                 continue
             try:
                 ts = datetime.datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f")
