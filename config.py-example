@@ -1,6 +1,6 @@
 #web server configuration
 port = 8080
 host = '0.0.0.0'
-db_path = "./sensordb.sql"
-data_slicing = 50
+db_path = "/home/pi/sensordb.sql"
+data_slicing = 100
 default_chart_period = 48

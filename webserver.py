@@ -104,6 +104,8 @@ class DBQueryWebService(object):
             result = con.execute(cmd)
             for res in result.fetchall():
                 ts = res[0]
+                if type(ts) in (str, unicode):
+                    continue
                 ts = datetime.datetime.fromtimestamp(ts).isoformat()
                 timestamps.append(ts)
                 vals.append(res[1])
