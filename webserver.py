@@ -6,6 +6,9 @@ from IPython import embed
 import sqlite3
 import cherrypy
 
+
+import config #local configuration
+
 def unix_time(dt):
     epoch = datetime.datetime.utcfromtimestamp(0)
     delta = dt - epoch
@@ -67,9 +70,15 @@ class DBQueryWebService(object):
     def getTemperature(self, sensorid):
         """
         """
-        start = datetime.datetime.now() - datetime.timedelta(hours=92)
+        start = datetime.datetime.now() - datetime.timedelta(hours=config.default_chart_period)
         start = unix_time(start)
         tablename = str(sensorid) + "temperature"
+        #with sqlite3.connect(self.dbpath) as con:
+            #cmd = "SELECT timestamp FROM '{table}' ORDER BY rowid DESC LIMIT 1;".format(table=tablename)
+            #result = con.execute(cmd)
+            #ts = result.fetchone()
+        #stop = datetime.datetime.fromtimestamp(ts)
+        #start = stop -
         return self._get_data(sensorid, tablename, start)
 
     def _get_data_json(self, sensorid, tablename, start):
@@ -99,8 +108,8 @@ class DBQueryWebService(object):
                 timestamps.append(ts)
                 vals.append(res[1])
             d = {}
-            d["timestamps"] = timestamps[::50]
-            d["values"] = vals[::50]
+            d["timestamps"] = timestamps[::config.data_slicing]
+            d["values"] = vals[::config.data_slicing]
             return json.dumps(d)
 
 
@@ -108,8 +117,8 @@ class DBQueryWebService(object):
 if __name__ == '__main__':
     conf = {
             'global': {
-            'server.socket_port': 8080,
-            'server.socket_host': '0.0.0.0'
+            'server.socket_port': config.port,
+            'server.socket_host': config.host
                 },
         '/': {
             'tools.sessions.on': True,
@@ -132,6 +141,6 @@ if __name__ == '__main__':
     }
 
     webapp = WebApp()
-    webapp.dbquery = DBQueryWebService("./sensordb.sql")
+    webapp.dbquery = DBQueryWebService(config.db_path)
     cherrypy.quickstart(webapp, '/', conf)
 
